@@ -27,7 +27,9 @@ namespace Volorf.FollowingCamera
 
         private void Start()
         {
-            _targetCameraTransform = GameObject.FindGameObjectWithTag(targetCameraTag).transform;
+            GameObject cameraGO = GameObject.FindGameObjectWithTag(targetCameraTag);
+            _targetCameraTransform = cameraGO.transform;
+            _targetCamera = cameraGO.GetComponent<Camera>();
             transform.position = _targetCameraTransform.position;
             transform.forward = _targetCameraTransform.forward;
             
