@@ -6,6 +6,7 @@ namespace Volorf.FollowingCamera
     public class FollowCamera : MonoBehaviour
     {
         [SerializeField] private string targetCameraTag = "MainCamera";
+        [SerializeField] private float zOffset = 0f;
 
         [Space(16)] [Header("Animation")]
         [SerializeField] private bool animated = true;
@@ -42,7 +43,8 @@ namespace Volorf.FollowingCamera
 
         private void Update()
         {
-            var newPos = Vector3.SmoothDamp(transform.position, _targetCameraTransform.position, ref _movementVelocity,
+            Vector3 targetPos = _targetCameraTransform.forward * zOffset + _targetCameraTransform.position;
+            var newPos = Vector3.SmoothDamp(transform.position, targetPos, ref _movementVelocity,
                 movementSmoothness);
             transform.position = newPos;
 
