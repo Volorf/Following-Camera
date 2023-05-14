@@ -6,7 +6,9 @@ namespace Volorf.FollowingCamera
     public class FollowCamera : MonoBehaviour
     {
         [SerializeField] private string targetCameraTag = "MainCamera";
-        [SerializeField] private float zOffset = 0f;
+        [SerializeField] private string targetFocusTag = "TargetFocus";
+        [SerializeField] private bool isTargetFocisMode = false;
+        [SerializeField] private float offset = 0f;
 
         [Space(16)] [Header("Animation")]
         [SerializeField] private bool animated = true;
@@ -25,10 +27,13 @@ namespace Volorf.FollowingCamera
         private Transform _targetCameraTransform;
         private Camera _targetCamera;
         private Camera _thisCamera;
+        private Transform _targetFocusTransform;
 
         private void Start()
         {
             GameObject cameraGO = GameObject.FindGameObjectWithTag(targetCameraTag);
+            _targetFocusTransform = GameObject.FindGameObjectWithTag(targetFocusTag).transform;
+
             _targetCameraTransform = cameraGO.transform;
             _targetCamera = cameraGO.GetComponent<Camera>();
             transform.position = _targetCameraTransform.position;
@@ -43,14 +48,37 @@ namespace Volorf.FollowingCamera
 
         private void Update()
         {
-            Vector3 targetPos = _targetCameraTransform.forward * zOffset + _targetCameraTransform.position;
-            var newPos = Vector3.SmoothDamp(transform.position, targetPos, ref _movementVelocity,
-                movementSmoothness);
-            transform.position = newPos;
+            if (isTargetFocisMode)
+            {
+                var towardsTargetVec = (_targetFocusTransform.position - _targetCameraTransform.position).normalized;
+                Vector3 targetPos = _targetCameraTransform.position + towardsTargetVec * offset;
+                var newPos = Vector3.SmoothDamp(transform.position, targetPos, ref _movementVelocity,
+                    movementSmoothness);
+                transform.position = newPos;
+            }
+            else
+            {
+                Vector3 targetPos = _targetCameraTransform.forward * offset + _targetCameraTransform.position;
+                var newPos = Vector3.SmoothDamp(transform.position, targetPos, ref _movementVelocity,
+                    movementSmoothness);
+                transform.position = newPos;
+            }
 
-            var newForw = Vector3.SmoothDamp(transform.forward, _targetCameraTransform.forward, ref _rotationVelocity,
-                rotationSmoothness);
-            transform.forward = newForw;
+            if (isTargetFocisMode)
+            {
+                var towardsTargetVec = (_targetFocusTransform.position - _targetCameraTransform.position).normalized;
+                var newForw = Vector3.SmoothDamp(transform.forward, towardsTargetVec, ref _rotationVelocity,
+                    rotationSmoothness);
+                transform.forward = newForw;
+            }
+            else
+            {
+                var newForw = Vector3.SmoothDamp(transform.forward, _targetCameraTransform.forward, ref _rotationVelocity,
+                    rotationSmoothness);
+                transform.forward = newForw;
+            }
+            
+            
         }
     }
 }
