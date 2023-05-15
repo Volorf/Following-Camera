@@ -8,7 +8,12 @@ namespace Volorf.FollowingCamera
         [SerializeField] private string targetCameraTag = "MainCamera";
         [SerializeField] private string targetFocusTag = "TargetFocus";
         [SerializeField] private bool isTargetFocisMode = false;
-        [SerializeField] private float offset = 0f;
+        [SerializeField] private float offsetAlongCamera = 0f;
+
+        [Header("Target Focus Offsets")] 
+        [SerializeField] private float tfOffsetX;
+        [SerializeField] private float tfOffsetY;
+        [SerializeField] private float tfOffsetZ;
 
         [Space(16)] [Header("Animation")]
         [SerializeField] private bool animated = true;
@@ -48,17 +53,27 @@ namespace Volorf.FollowingCamera
 
         private void Update()
         {
+            Vector3 newTFPos = new Vector3();
+            
             if (isTargetFocisMode)
             {
-                var towardsTargetVec = (_targetFocusTransform.position - _targetCameraTransform.position).normalized;
-                Vector3 targetPos = _targetCameraTransform.position + towardsTargetVec * offset;
+                Vector3 offsets = new Vector3();
+                offsets += _targetFocusTransform.right * tfOffsetX;
+                offsets += _targetFocusTransform.forward * tfOffsetZ;
+                offsets += _targetFocusTransform.up * tfOffsetY;
+                
+                newTFPos = _targetFocusTransform.position + offsets;
+                
+
+                var towardsTargetVec = (newTFPos - _targetCameraTransform.position).normalized;
+                Vector3 targetPos = _targetCameraTransform.position + towardsTargetVec * offsetAlongCamera;
                 var newPos = Vector3.SmoothDamp(transform.position, targetPos, ref _movementVelocity,
                     movementSmoothness);
                 transform.position = newPos;
             }
             else
             {
-                Vector3 targetPos = _targetCameraTransform.forward * offset + _targetCameraTransform.position;
+                Vector3 targetPos = _targetCameraTransform.forward * offsetAlongCamera + _targetCameraTransform.position;
                 var newPos = Vector3.SmoothDamp(transform.position, targetPos, ref _movementVelocity,
                     movementSmoothness);
                 transform.position = newPos;
@@ -66,7 +81,7 @@ namespace Volorf.FollowingCamera
 
             if (isTargetFocisMode)
             {
-                var towardsTargetVec = (_targetFocusTransform.position - _targetCameraTransform.position).normalized;
+                var towardsTargetVec = (newTFPos - _targetCameraTransform.position).normalized;
                 var newForw = Vector3.SmoothDamp(transform.forward, towardsTargetVec, ref _rotationVelocity,
                     rotationSmoothness);
                 transform.forward = newForw;

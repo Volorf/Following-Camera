@@ -309,5 +309,9 @@ PrefabInstance:
       propertyPath: isTargetFocisMode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5771081111777444713, guid: 239c8fc346354524997aa7fbe88b7ef7, type: 3}
+      propertyPath: offsetAlongCamera
+      value: -2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 239c8fc346354524997aa7fbe88b7ef7, type: 3}
