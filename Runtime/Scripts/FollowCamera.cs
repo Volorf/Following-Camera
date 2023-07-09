@@ -15,6 +15,11 @@ namespace Volorf.FollowingCamera
         [SerializeField] private float tfOffsetY;
         [SerializeField] private float tfOffsetZ;
 
+        [Header("Camera Offsets")] 
+        [SerializeField] private float camOffsetX;
+        [SerializeField] private float camOffsetY;
+        [SerializeField] private float camOffsetZ;
+        
         [Space(16)] [Header("Animation")]
         [SerializeField] private bool animated = true;
         [SerializeField] private float movementSmoothness = 1f;
@@ -52,6 +57,7 @@ namespace Volorf.FollowingCamera
 
         private void Update()
         {
+            Vector3 cameraOffset = new Vector3(camOffsetX, camOffsetY, camOffsetZ);
             Vector3 newTFPos = new Vector3();
             
             if (isTargetFocusMode)
@@ -67,14 +73,14 @@ namespace Volorf.FollowingCamera
                 Vector3 targetPos = _targetCameraTransform.position + towardsTargetVec * offsetAlongCamera;
                 var newPos = Vector3.SmoothDamp(transform.position, targetPos, ref _movementVelocity,
                     movementSmoothness);
-                transform.position = newPos;
+                transform.position = newPos + cameraOffset;
             }
             else
             {
                 Vector3 targetPos = _targetCameraTransform.forward * offsetAlongCamera + _targetCameraTransform.position;
                 var newPos = Vector3.SmoothDamp(transform.position, targetPos, ref _movementVelocity,
                     movementSmoothness);
-                transform.position = newPos;
+                transform.position = newPos + cameraOffset;
             }
 
             if (isTargetFocusMode)

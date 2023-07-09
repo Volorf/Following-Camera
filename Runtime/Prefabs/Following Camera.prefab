@@ -56,7 +56,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.05
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -89,7 +89,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetCameraTag: MainCamera
-  zOffset: 0
+  targetFocusTag: TargetFocus
+  isTargetFocusMode: 0
+  offsetAlongCamera: 0
+  tfOffsetX: 0
+  tfOffsetY: 0
+  tfOffsetZ: 0
   animated: 1
   movementSmoothness: 1
   rotationSmoothness: 1
