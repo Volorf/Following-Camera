@@ -37,6 +37,7 @@ namespace Volorf.FollowingCamera
         private Camera _targetCamera;
         private Camera _thisCamera;
         private Transform _targetFocusTransform;
+        
 
         private void Start()
         {
@@ -58,6 +59,9 @@ namespace Volorf.FollowingCamera
         private void Update()
         {
             Vector3 cameraOffset = new Vector3(camOffsetX, camOffsetY, camOffsetZ);
+            
+            Vector3 newTargetCamPos = _targetCameraTransform.position + cameraOffset;
+
             Vector3 newTFPos = new Vector3();
             
             if (isTargetFocusMode)
@@ -69,18 +73,18 @@ namespace Volorf.FollowingCamera
                 
                 newTFPos = _targetFocusTransform.position + offsets;
                 
-                var towardsTargetVec = (newTFPos - _targetCameraTransform.position).normalized;
-                Vector3 targetPos = _targetCameraTransform.position + towardsTargetVec * offsetAlongCamera;
+                var towardsTargetVec = (newTFPos - newTargetCamPos).normalized;
+                Vector3 targetPos = newTargetCamPos + towardsTargetVec * offsetAlongCamera;
                 var newPos = Vector3.SmoothDamp(transform.position, targetPos, ref _movementVelocity,
                     movementSmoothness);
-                transform.position = newPos + cameraOffset;
+                transform.position = newPos;
             }
             else
             {
                 Vector3 targetPos = _targetCameraTransform.forward * offsetAlongCamera + _targetCameraTransform.position;
                 var newPos = Vector3.SmoothDamp(transform.position, targetPos, ref _movementVelocity,
                     movementSmoothness);
-                transform.position = newPos + cameraOffset;
+                transform.position = newPos;
             }
 
             if (isTargetFocusMode)
