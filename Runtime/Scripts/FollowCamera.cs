@@ -7,7 +7,7 @@ namespace Volorf.FollowingCamera
     {
         [SerializeField] private string targetCameraTag = "MainCamera";
         [SerializeField] private string targetFocusTag = "TargetFocus";
-        [SerializeField] private bool isTargetFocisMode = false;
+        [SerializeField] private bool isTargetFocusMode = false;
         [SerializeField] private float offsetAlongCamera = 0f;
 
         [Header("Target Focus Offsets")] 
@@ -24,8 +24,7 @@ namespace Volorf.FollowingCamera
         [SerializeField] private bool copyFOV = true;
         [SerializeField] private bool copyClearFlag = true;
         [SerializeField] private bool copyBackground = true;
-        
-        
+
         private Vector3 _movementVelocity = Vector3.zero;
         private Vector3 _rotationVelocity = Vector3.zero;
 
@@ -55,7 +54,7 @@ namespace Volorf.FollowingCamera
         {
             Vector3 newTFPos = new Vector3();
             
-            if (isTargetFocisMode)
+            if (isTargetFocusMode)
             {
                 Vector3 offsets = new Vector3();
                 offsets += _targetFocusTransform.right * tfOffsetX;
@@ -64,7 +63,6 @@ namespace Volorf.FollowingCamera
                 
                 newTFPos = _targetFocusTransform.position + offsets;
                 
-
                 var towardsTargetVec = (newTFPos - _targetCameraTransform.position).normalized;
                 Vector3 targetPos = _targetCameraTransform.position + towardsTargetVec * offsetAlongCamera;
                 var newPos = Vector3.SmoothDamp(transform.position, targetPos, ref _movementVelocity,
@@ -79,7 +77,7 @@ namespace Volorf.FollowingCamera
                 transform.position = newPos;
             }
 
-            if (isTargetFocisMode)
+            if (isTargetFocusMode)
             {
                 var towardsTargetVec = (newTFPos - _targetCameraTransform.position).normalized;
                 var newForw = Vector3.SmoothDamp(transform.forward, towardsTargetVec, ref _rotationVelocity,
