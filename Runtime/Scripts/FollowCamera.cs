@@ -5,6 +5,7 @@ namespace Volorf.FollowingCamera
     [RequireComponent(typeof(Camera))]
     public class FollowCamera : MonoBehaviour
     {
+        [SerializeField] GameObject targetCamera;
         [SerializeField] private string targetCameraTag = "MainCamera";
         [SerializeField] private string targetFocusTag = "TargetFocus";
         [SerializeField] private bool isTargetFocusMode = false;
@@ -41,7 +42,18 @@ namespace Volorf.FollowingCamera
 
         private void Start()
         {
-            GameObject cameraGO = GameObject.FindGameObjectWithTag(targetCameraTag);
+            GameObject cameraGO = new GameObject();
+
+            if (targetCamera != null)
+            {
+                cameraGO = targetCamera;
+            }
+            else
+            {
+                GameObject.FindGameObjectWithTag(targetCameraTag);
+            }
+
+            
             _targetFocusTransform = GameObject.FindGameObjectWithTag(targetFocusTag).transform;
 
             _targetCameraTransform = cameraGO.transform;
