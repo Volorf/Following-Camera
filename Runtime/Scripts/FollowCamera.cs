@@ -5,6 +5,8 @@ namespace Volorf.FollowingCamera
     [RequireComponent(typeof(Camera))]
     public class FollowCamera : MonoBehaviour
     {
+        [SerializeField] bool warnUp;
+        [SerializeField] float warnUpTime;
         [SerializeField] GameObject targetCamera;
         [SerializeField] private string targetCameraTag = "MainCamera";
         [SerializeField] private string targetFocusTag = "TargetFocus";
@@ -38,6 +40,8 @@ namespace Volorf.FollowingCamera
         private Camera _targetCamera;
         private Camera _thisCamera;
         private Transform _targetFocusTransform;
+
+        bool canUpdating;
         
 
         private void Start()
@@ -66,10 +70,16 @@ namespace Volorf.FollowingCamera
             if (copyFOV) _thisCamera.fieldOfView = _targetCamera.fieldOfView;
             if (copyClearFlag) _thisCamera.clearFlags = _targetCamera.clearFlags;
             if (copyBackground) _thisCamera.backgroundColor = _targetCamera.backgroundColor;
+            
+            Invoke(nameof(AllowUpdating), warnUpTime);
         }
+
+        void AllowUpdating() => canUpdating = true;
 
         private void Update()
         {
+            if(!canUpdating) return;
+            
             Vector3 cameraOffset = new Vector3(camOffsetX, camOffsetY, camOffsetZ);
             
             Vector3 newTargetCamPos = _targetCameraTransform.position + cameraOffset;
