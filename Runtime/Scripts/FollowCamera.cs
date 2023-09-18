@@ -20,9 +20,9 @@ namespace Volorf.FollowingCamera
         [SerializeField] private float tfOffsetZ;
 
         [Header("Camera Offsets")] 
-        [SerializeField] private float camOffsetX;
+        // [SerializeField] private float camOffsetX;
         [SerializeField] private float camOffsetY;
-        [SerializeField] private float camOffsetZ;
+        // [SerializeField] private float camOffsetZ;
         
         [Space(16)] [Header("Animation")]
         [SerializeField] private bool animated = true;
@@ -51,18 +51,7 @@ namespace Volorf.FollowingCamera
 
         private void Start()
         {
-            GameObject cameraGO = new GameObject();
-
-            if (targetCamera != null)
-            {
-                cameraGO = targetCamera;
-            }
-            else
-            {
-                GameObject.FindGameObjectWithTag(targetCameraTag);
-            }
-
-            
+            GameObject cameraGO = GameObject.FindGameObjectWithTag(targetCameraTag);
             _targetFocusTransform = GameObject.FindGameObjectWithTag(targetFocusTag).transform;
 
             _targetCameraTransform = cameraGO.transform;
@@ -85,9 +74,9 @@ namespace Volorf.FollowingCamera
         {
             if(!canUpdating) return;
             
-            Vector3 cameraOffset = new Vector3(camOffsetX, camOffsetY, camOffsetZ);
+            // Vector3 cameraOffset = new Vector3(camOffsetX * _targetCameraTransform.right, camOffsetY, camOffsetZ);
             
-            Vector3 newTargetCamPos = _targetCameraTransform.position + cameraOffset;
+            Vector3 newTargetCamPos = _targetCameraTransform.position + _targetCameraTransform.up * camOffsetY;
 
             Vector3 newTFPos = new Vector3();
             
@@ -108,7 +97,7 @@ namespace Volorf.FollowingCamera
             }
             else
             {
-                Vector3 targetPos = _targetCameraTransform.forward * offsetAlongCamera + _targetCameraTransform.position;
+                Vector3 targetPos = _targetCameraTransform.forward * offsetAlongCamera + _targetCameraTransform.position + _targetCameraTransform.up * camOffsetY;
                 var newPos = Vector3.SmoothDamp(transform.position, targetPos, ref _movementVelocity,
                     movementSmoothness);
                 transform.position = newPos;
