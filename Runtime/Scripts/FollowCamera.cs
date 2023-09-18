@@ -12,6 +12,7 @@ namespace Volorf.FollowingCamera
         [SerializeField] private string targetFocusTag = "TargetFocus";
         [SerializeField] private bool isTargetFocusMode = false;
         [SerializeField] private float offsetAlongCamera = 0f;
+        [SerializeField] bool dontDestroyOnLoad;
 
         [Header("Target Focus Offsets")] 
         [SerializeField] private float tfOffsetX;
@@ -45,7 +46,7 @@ namespace Volorf.FollowingCamera
         
         void Awake()
         {
-            DontDestroyOnLoad(this.gameObject);
+            if (dontDestroyOnLoad) DontDestroyOnLoad(this.gameObject);
         }
 
         private void Start()
