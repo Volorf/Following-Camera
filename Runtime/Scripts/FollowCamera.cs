@@ -43,6 +43,10 @@ namespace Volorf.FollowingCamera
 
         bool canUpdating;
         
+        void Awake()
+        {
+            DontDestroyOnLoad(this.gameObject);
+        }
 
         private void Start()
         {
