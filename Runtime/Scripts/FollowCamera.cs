@@ -23,6 +23,8 @@ namespace Volorf.FollowingCamera
         [SerializeField] private float _camOffsetX;
         [SerializeField] private float camOffsetY;
         [SerializeField] private float _camOffsetZ;
+        [SerializeField] float _rotateYOffset;
+        [SerializeField] float _rotateXOffset;
         
         [Space(16)] [Header("Animation")]
         [SerializeField] private bool animated = true;
@@ -120,7 +122,7 @@ namespace Volorf.FollowingCamera
             }
             else
             {
-                var newForw = Vector3.SmoothDamp(transform.forward, _targetCameraTransform.forward, ref _rotationVelocity,
+                var newForw = Vector3.SmoothDamp(transform.forward, Quaternion.AngleAxis(_rotateXOffset, _targetCameraTransform.right) * (Quaternion.AngleAxis(_rotateYOffset, _targetCameraTransform.up) * _targetCameraTransform.forward), ref _rotationVelocity,
                     rotationSmoothness);
                 transform.forward = newForw;
             }
