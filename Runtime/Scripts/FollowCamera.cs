@@ -20,7 +20,7 @@ namespace Volorf.FollowingCamera
         [SerializeField] private float tfOffsetZ;
 
         [Header("Camera Offsets")] 
-        // [SerializeField] private float camOffsetX;
+        [SerializeField] private float _camOffsetX;
         [SerializeField] private float camOffsetY;
         // [SerializeField] private float camOffsetZ;
         
@@ -76,7 +76,7 @@ namespace Volorf.FollowingCamera
             
             // Vector3 cameraOffset = new Vector3(camOffsetX * _targetCameraTransform.right, camOffsetY, camOffsetZ);
             
-            Vector3 newTargetCamPos = _targetCameraTransform.position + _targetCameraTransform.up * camOffsetY;
+            Vector3 newTargetCamPos = _targetCameraTransform.position + _targetCameraTransform.up * camOffsetY + _targetCameraTransform.right * _camOffsetX;
 
             Vector3 newTFPos = new Vector3();
             
@@ -97,7 +97,7 @@ namespace Volorf.FollowingCamera
             }
             else
             {
-                Vector3 targetPos = _targetCameraTransform.forward * offsetAlongCamera + _targetCameraTransform.position + _targetCameraTransform.up * camOffsetY;
+                Vector3 targetPos = _targetCameraTransform.forward * offsetAlongCamera + _targetCameraTransform.position + _targetCameraTransform.up * camOffsetY + _targetCameraTransform.right * _camOffsetX;
                 var newPos = Vector3.SmoothDamp(transform.position, targetPos, ref _movementVelocity,
                     movementSmoothness);
                 transform.position = newPos;
