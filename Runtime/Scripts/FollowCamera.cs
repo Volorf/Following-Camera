@@ -22,7 +22,7 @@ namespace Volorf.FollowingCamera
         [Header("Camera Offsets")] 
         [SerializeField] private float _camOffsetX;
         [SerializeField] private float camOffsetY;
-        // [SerializeField] private float camOffsetZ;
+        [SerializeField] private float _camOffsetZ;
         
         [Space(16)] [Header("Animation")]
         [SerializeField] private bool animated = true;
@@ -76,7 +76,10 @@ namespace Volorf.FollowingCamera
             
             // Vector3 cameraOffset = new Vector3(camOffsetX * _targetCameraTransform.right, camOffsetY, camOffsetZ);
             
-            Vector3 newTargetCamPos = _targetCameraTransform.position + _targetCameraTransform.up * camOffsetY + _targetCameraTransform.right * _camOffsetX;
+            Vector3 newTargetCamPos = _targetCameraTransform.position + 
+                                      _targetCameraTransform.up * camOffsetY + 
+                                      _targetCameraTransform.right * _camOffsetX + 
+                                      _targetCameraTransform.forward * _camOffsetZ;
 
             Vector3 newTFPos = new Vector3();
             
@@ -97,7 +100,12 @@ namespace Volorf.FollowingCamera
             }
             else
             {
-                Vector3 targetPos = _targetCameraTransform.forward * offsetAlongCamera + _targetCameraTransform.position + _targetCameraTransform.up * camOffsetY + _targetCameraTransform.right * _camOffsetX;
+                Vector3 targetPos = _targetCameraTransform.forward * offsetAlongCamera + 
+                                    _targetCameraTransform.position + 
+                                    _targetCameraTransform.up * camOffsetY + 
+                                    _targetCameraTransform.right * _camOffsetX +
+                                    _targetCameraTransform.forward * _camOffsetZ;
+                
                 var newPos = Vector3.SmoothDamp(transform.position, targetPos, ref _movementVelocity,
                     movementSmoothness);
                 transform.position = newPos;
