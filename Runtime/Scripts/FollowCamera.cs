@@ -13,6 +13,9 @@ namespace Volorf.FollowingCamera
         [SerializeField] private bool isTargetFocusMode = false;
         [SerializeField] private float offsetAlongCamera = 0f;
         [SerializeField] bool dontDestroyOnLoad;
+        
+        [Tooltip("To compensate eye offset for L/R eye in VR mode")]
+        [SerializeField] float _eyeOffset;
 
         [Header("Target Focus Offsets")] 
         [SerializeField] private float tfOffsetX;
@@ -96,6 +99,8 @@ namespace Volorf.FollowingCamera
                 
                 var towardsTargetVec = (newTFPos - newTargetCamPos).normalized;
                 Vector3 targetPos = newTargetCamPos + towardsTargetVec * offsetAlongCamera;
+                targetPos += transform.right * _eyeOffset;
+                
                 var newPos = Vector3.SmoothDamp(transform.position, targetPos, ref _movementVelocity,
                     movementSmoothness);
                 transform.position = newPos;
@@ -107,6 +112,8 @@ namespace Volorf.FollowingCamera
                                     _targetCameraTransform.up * camOffsetY + 
                                     _targetCameraTransform.right * _camOffsetX +
                                     _targetCameraTransform.forward * _camOffsetZ;
+                
+                targetPos += transform.right * _eyeOffset;
                 
                 var newPos = Vector3.SmoothDamp(transform.position, targetPos, ref _movementVelocity,
                     movementSmoothness);
